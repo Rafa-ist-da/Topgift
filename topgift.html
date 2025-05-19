@@ -30,7 +30,14 @@
     };
 
     websocket.onmessage = (event) => {
-      try {
+  document.getElementById('giftSender').style.display = 'none';
+  document.getElementById('giftAmount').style.display = 'none';
+  try {
+    // ... dein restlicher Code
+  } catch (error) {
+    // ... Fehlerbehandlung
+  }
+};
         const data = JSON.parse(event.data);
         document.getElementById('giftSender').textContent = data.sender || '';
         document.getElementById('giftAmount').textContent = data.amount || '';
