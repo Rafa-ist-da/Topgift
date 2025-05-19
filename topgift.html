@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    color: white; /* Adjust text color as needed */
+    font-family: sans-serif; /* Choose your preferred font */
+  }
+  #giftSender {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  #giftImage {
+    max-width: 100px; /* Adjust image size as needed */
+    max-height: 100px;
+    display: none; /* Standardmäßig ausgeblendet */
+  }
+</style>
+</head>
+<body>
+  Größtes Geschenk von: <div id="giftSender"></div>
+  Wert: <div id="giftAmount"></div>
+  <img id="giftImage" src="">
+
+  <script>
+    const websocket = new WebSocket('ws://127.0.0.1:8080');
+
+    websocket.onopen = () => {
+      console.log('Websocket connection established.');
+    };
+
+    websocket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        document.getElementById('giftSender').textContent = data.sender || '';
+        document.getElementById('giftAmount').textContent = data.amount || '';
+        if (data.image) {
+          document.getElementById('giftImage').src = data.image;
+          document.getElementById('giftImage').style.display = 'block'; // Anzeigen, wenn Bild-URL vorhanden
+        } else {
+          document.getElementById('giftImage').style.display = 'none'; // Ausblenden, wenn keine Bild-URL vorhanden
+        }
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+    };
+
+    websocket.onclose = () => {
+      console.log('Websocket connection closed.');
+    };
+  </script>
+</body>
+</html>
